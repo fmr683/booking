@@ -41,12 +41,16 @@ class BookingController extends Controller
         
         $bookingStatus = array_flip(bookingStatus());
         if (empty($request["bstatus"]) && !isset($request["bstatus"]) ) $rarray['bstatus'] = array($bookingStatus["Pending"],$bookingStatus["Completed"]); 
+        elseif (empty($request["dtype"])) $rarray['bstatus'] =  $bookingStatus;
         else $rarray['bstatus'] = array($request["bstatus"]);
 
         $dayTypes = array_flip(dayTypes());
-        if (empty($request["dtype"])) $rarray['dtype'] = array($dayTypes["Dinner"]); 
+        if (empty($request["dtype"]) && !isset($request["dtype"])) $rarray['dtype'] = $dayTypes; 
+        elseif (empty($request["dtype"])) $rarray['dtype'] = $dayTypes;
         else $rarray['dtype'] = array($request["dtype"]);
         
+
+
         $bookings = Booking::getAllBookings($rarray);
         return view('booking.index', compact('bookings','rarray'));
     }
@@ -88,6 +92,10 @@ class BookingController extends Controller
                 $request['active'] = 2; // Completed
             } else {
                 $request['active'] = 1; // Pending
+            }
+
+            if (!empty($request['discount']) && $request['discount'] > 0) {
+                $request["total"] = $request["total"]  - (($request['total'] * $request['discount']) / 100);
             }
 
             $booking = Booking::create($request->all());

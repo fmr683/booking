@@ -17,7 +17,7 @@
         <!-- CSS -->
         <link href="/css/app.min.1.css" rel="stylesheet">
         <link href="/css/app.min.2.css" rel="stylesheet">
-        
+
     </head>
     <body>
         <header id="header" class="clearfix" data-current-skin="blue">

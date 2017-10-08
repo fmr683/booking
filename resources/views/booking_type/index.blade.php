@@ -10,6 +10,12 @@
     <div class="card-header">
         <h2>Booking Types</h2>
     </div>
+
+     <div class="card-body card-padding">
+     <div class="row">
+         <button class="btn bgm-blue waves-effect float-right" onclick="window.location.href='/booking-type/create/'">Create Booking Types</button>
+        </div>
+        <br/>
     
     <div class="table-responsive">
         <table id="data-table-basic" class="table table-striped">
@@ -31,5 +37,6 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 @endsection

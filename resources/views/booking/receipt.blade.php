@@ -84,7 +84,7 @@
         </tr>
          <tr>
           <td><b>Total Paid Amount:</b></td>
-          <td>{{ $paid }}</td>
+          <td>{{ number_format($paid , 2, '.', '')}}</td>
         </tr>
         @else
          <tr>
@@ -94,7 +94,7 @@
          <tr>
           <td><b>Balance Payment:</b></td>
           <td>
-        {{$booking->total - $paid }}
+            {{number_format($booking->total - $paid, 2, '.', '') }}
           </td>
         </tr>
 
@@ -109,3 +109,7 @@
   </tr>
   @endif
 </table>
+
+<script>
+window.print();
+</script>

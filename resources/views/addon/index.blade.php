@@ -13,6 +13,12 @@
         <h2>Addons</h2>
     </div>
     
+   <div class="card-body card-padding">
+    <div class="row">
+         <button class="btn bgm-blue waves-effect float-right" onclick="window.location.href='/addon/create/'">Create Addons</button>
+        </div>
+        <br/>
+
     <div class="table-responsive">
         <table id="data-table-basic" class="table table-striped">
             <thead>
@@ -37,5 +43,6 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 @endsection

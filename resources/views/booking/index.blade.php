@@ -9,8 +9,7 @@
 @endphp
 
 <style type="text/css">
-  .float-right { float: right;}
-}
+ 
 </style>
 
 
@@ -42,7 +41,7 @@
                       <select class="chosen" data-placeholder="Choose Booking Status" name="bstatus">
                       <option value="">Booking Status</option>
                       @foreach($bookingStatus as $key => $value)
-                        <option value="{{$key}}" {{ ($rarray['bstatus'][0] == $key ? 'selected' : '')}} >{{$value}}</option>
+                        <option value="{{$key}}" {{ (!empty($rarray['bstatus'][0]) && $rarray['bstatus'][0] == $key ? 'selected' : '')}} >{{$value}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -105,29 +104,15 @@
         </table>
     </div>
 </div>
+
+<script type="text/javascript">
+$( "#sdate" ).datepicker( "setDate", new Date());
+$( "#edate" ).datepicker("refresh");
+</script>
+
+
 @endsection
 
 
 
-<!--
-<form method="GET" action="/booking/">
-  <input ><br>
-  <input >
 
- <select name="bstatus">
- <option value="">--Booking Status--</option>
-@foreach($bookingStatus as $key => $value)
-  <option value="{{$key}}" {{ ($rarray['bstatus'][0] == $key ? 'selected' : '')}} >{{$value}}</option>
-@endforeach
-</select>
-
-<select name="dtype">
-<option  value="">--Day Type--</option>
-@foreach($dayTypes as $key => $value)
-  <option value="{{$key}}" {{ ($rarray['dtype'][0] == $key ? 'selected' : '') }}>{{$value}}</option>
-@endforeach
-</select>
-
-    <input type="submit" value="Search">
-</form>
--->

@@ -64,19 +64,16 @@ class Booking extends Model
             ->join('price_mapping', 'booking.pm_id', '=', 'price_mapping.id')
             ->join('price_mapping_btype', 'booking.pm_id', '=', 'price_mapping_btype.id')
             ->where('booking.day_type','=',$rarray["day_type"])
-            ->where('booking.pm_id','=',$rarray["pm_id"])
             ->where('booking.b_date','=',$rarray["b_date"])
             ->whereIn('active', array(1,2))
             ->whereIn('price_mapping_btype.btype_id',function ($query) use ($rarray) {
                 $query->select("btype_id")
-                ->from('booking')
-                ->join('price_mapping', 'booking.pm_id', '=', 'price_mapping.id')
-                ->join('price_mapping_btype', 'booking.pm_id', '=', 'price_mapping_btype.id')
-                ->where('booking.day_type','=',$rarray["day_type"])
-                ->where('booking.b_date','=',$rarray["b_date"])
-                ->whereIn('active', array(1,2));
+                ->from('price_mapping')
+                ->join('price_mapping_btype', 'price_mapping.id', '=', 'price_mapping_btype.id')
+                ->where('price_mapping.id','=',$rarray["pm_id"]);
             })
             ->get();
+
     }
 
       public static function getBookingName($rarray) {

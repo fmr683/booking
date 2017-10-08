@@ -37,11 +37,11 @@ input[type=number]::-webkit-outer-spin-button {
 
       <div class="form-group fg-line">
         <label for="name">Date</label>
-        <input type="text"  name="b_date" value="{{ $booking->b_date or '' }}" class="form-control date-picker" id="b_date" placeholder="Booking Date" required>
+        <input type="text" {{(!empty($booking->id) ? 'disabled' : '' )}} name="b_date" value="{{ $booking->b_date or '' }}" class="form-control date-picker" id="b_date" placeholder="Booking Date" required>
       </div>
 
       <div class="form-group fg-line" >
-          <select class="form-control pad"name="day_type" id="day_type" required>
+          <select class="form-control pad"name="day_type" id="day_type" required {{(!empty($booking->id) ? 'disabled' : '' )}}>
             <option value="">-- Select Day Type --</option>
            @foreach(dayTypes() as $key => $dayType)
             <option value="{{$key}}" {{ (!empty($booking) && $booking->day_type == $key ? 'selected' : '')  }}>{{$dayType}}</option>
@@ -52,7 +52,7 @@ input[type=number]::-webkit-outer-spin-button {
 
        <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Hall</p>
-          <select name="pm_id" id="pm_id" class="form-control pad" required>
+          <select name="pm_id" id="pm_id" class="form-control pad" required {{(!empty($booking->id) ? 'disabled' : '' )}}>
            <option value="">-- Select Hall --</option>
         </select>
       </div>
@@ -95,8 +95,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 
        <div class="form-group fg-line" >
-          <p class="f-500 c-black m-b-15">Total Amount</p>
-          <p class="f-500 c-red m-b-15" id="tt_total">{{ $booking->total or '0.00' }}</p>
+          <p class="f-500 c-black m-b-15">Total Booking Price</p>
+          <p class="f-500 c-red m-b-15" id="tt_total">
+          @if (!empty($booking->id))
+          {{ ($booking->h_total + $booking->add_total) }}
+          @else 
+          {{ '0.00'}}
+          @endif
+          </p>
       </div>
 
        <br/>
@@ -127,7 +133,7 @@ input[type=number]::-webkit-outer-spin-button {
 
       @if (empty($booking->id)) 
        <div class="form-group fg-line">
-        <label for="name">Discount</label>
+        <label for="name">Discount (%)</label>
         <input type="number" step=".01"  name="discount" value="{{ $booking->discount or '0.00' }}" class="form-control " id="discount" placeholder="Discount">
       </div>
       @else
@@ -144,14 +150,14 @@ input[type=number]::-webkit-outer-spin-button {
 
 
       <div class="form-group fg-line">
-        <label for="name">Total</label>
+        <label for="name">Final Price</label>
         <p class="f-500 c-red m-b-15" id="total_with_disc">{{ $booking->total or '0.00' }}</p>
         <input type="hidden"  name="total" value="{{ $booking->total or '0.00' }}" class="form-control " id="total">
       </div>
 
        <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Payment</p>
-          <select name="payment_type" id="payment_type" class="form-control pad" required>
+          <select name="payment_type" id="payment_type" class="form-control pad" {{(empty($booking->id) ? 'required' : '' )}} >
              <option value="">--Select--</option>
               <option value="1">Advance</option>
               <option value="2">Full Payment</option>
@@ -181,7 +187,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 
       <div class="form-group fg-line" id="advance_div" style="display: none">
-        <label for="name">Advance</label>
         <input type="number"  step=".01" name="advance"  value="{{ (!empty($booking) ? ($booking->total  - $paid) : '')  }}" class="form-control " id="advance" placeholder="Advance">
       </div>
 
@@ -193,6 +198,22 @@ input[type=number]::-webkit-outer-spin-button {
 
 @if (!empty($booking->id)) 
 <br/><br/>
+<br/>
+
+  <div class="row">
+    <div class="col-sm-10 col-xs-6"></div>
+    <div class="col-sm-2 col-xs-6"> 
+@if (!empty($booking->active) && $booking->active == 1) 
+{!! Form::open(array('action' => array('BookingController@deactiveBooking', !empty($booking->id) ? $booking->id : '' ),
+ 'class' => 'form', 'method' => 'PATCH')) !!}
+ <input type="hidden" name="active" value="3" />
+  <button type="submit" class="btn btn-danger btn-sm m-t-10">Cancel the Booking</button>
+{!! Form::close() !!}
+@endif
+</div>
+  </div>
+  
+<br/>
 <br/>
 
 <div class="alert  alert-info alert-dismissible" role="alert">
@@ -213,19 +234,13 @@ input[type=number]::-webkit-outer-spin-button {
       <td>{{($value['payment_type'] == '1' ? 'Advance' : 'Full Payment')}}</td> 
       <td>{{$value['amount']}}</td>
       <td>{{$value['paid_date']}}</td>
-      <td><a href='/booking/{{$booking->id}}/?pid={{$value["bpid"]}}&ptype={{$value["payment_type"]}}'>Print</a></td>
+      <td><a target="_blank" href='/booking/{{$booking->id}}/?pid={{$value["bpid"]}}&ptype={{$value["payment_type"]}}'>Print</a></td>
     </tr>
   @endforeach
 
 </table>
 
-@if (!empty($booking->active) && $booking->active == 1) 
-{!! Form::open(array('action' => array('BookingController@deactiveBooking', !empty($booking->id) ? $booking->id : '' ),
- 'class' => 'form', 'method' => 'PATCH')) !!}
- <input type="hidden" name="active" value="3" />
-  <input type="submit" value="Cancel the Booking">
-{!! Form::close() !!}
-@endif
+
 
     </div>
 </div>
@@ -245,10 +260,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 function checkDuplicate(dayType, pm_id, date) {
 
+
   if ((dayType != undefined && dayType !== '') && (pm_id != undefined && pm_id !== '') && (date != undefined && date !== '')) {
     $.getJSON("/booking/check-duplicate/"+ dayType + '/' + pm_id + '/' + date, function(data) {
         var i =0;
-
         if (data[0] !== undefined) {
           $(".warning").show();
         }else {
@@ -324,15 +339,19 @@ $(document).on("change", "input[name='addon[]']", function () {
     var addon_price = parseFloat($(this).data('addon-price'));
     var get_addon_price = parseFloat($("#addon_amount").html());
 
+
     if (this.checked) {
       $("#addon_amount").html((get_addon_price + addon_price).toFixed(2))
-      $("#addon_amount").val((get_addon_price + addon_price).toFixed(2))
+     // $("#addon_amount").val((get_addon_price + addon_price).toFixed(2))
+     total(addon_price)
     } else {
       $("#addon_amount").html((get_addon_price - addon_price).toFixed(2))
-      $("#addon_amount").val((get_addon_price - addon_price).toFixed(2))
+     // $("#addon_amount").val((get_addon_price - addon_price).toFixed(2))
+     total(-addon_price)
     }
-    total()
 });
+
+
 
 $('#payment_type').on('change', function() {
   if ($(this).val() == 1) {
@@ -342,22 +361,47 @@ $('#payment_type').on('change', function() {
   }
 })
 
+/*
+timer = 0;
 
-$('#discount').on('input', function() {
-    var discount  = parseFloat($(this).val())
-    var tt_total =  parseFloat($("#tt_total").html())
-    $("#total").val(tt_total - ((tt_total * discount) / 100));
-
+$('#discount').on('keyup', function(e){
+    if (timer) {
+        clearTimeout(timer);
+    }
+    timer = setTimeout(discount, 1400); 
 });
 
-function total() {
+
+function discount() {
+    var discount  = parseFloat($('#discount').val())
+    var tt_total =  parseFloat($("#tt_total").html())
+    var final_dis = tt_total - ((tt_total * discount) / 100) ;
+    $("#total").val(final_dis);
+   $("#tt_total").html(final_dis);
+   $("#total_with_disc").html(final_dis)
+}*/
+
+function total(t_addon) {
+
+  if (t_addon == undefined) t_addon = null
+
   var hallAmount = parseFloat($("#pm_amount").html());
   var addonAmount = parseFloat($("#addon_amount").html());
   $("#add_total").val(addonAmount);
   var total = hallAmount + addonAmount;
-   $("#tt_total").html(total);
-   $("#total_with_disc").html(total)
-   $("#total").val(total)
+
+   $("#tt_total").html(total); // Total Booking info
+
+   var tot_with_dic = parseFloat($("#total_with_disc").html());
+   if (tot_with_dic > 0) {
+
+      $("#total_with_disc").html(tot_with_dic + t_addon)
+      $("#total").val(tot_with_dic + addonAmount)
+   } else {
+    $("#total_with_disc").html(total)
+    $("#total").val(total)
+   }
+  
 }
 
 $('form').on('focus', 'input[type=number]', function (e) {

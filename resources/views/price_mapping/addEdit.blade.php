@@ -25,7 +25,7 @@
        <p class="f-500 c-black m-b-15" style="padding-left: 12px"> Booking Types</p>
         @foreach ($bookingTypes as $key => $booking) 
 
-        <div class="col-sm-2 m-b-20">
+        <div class="col-sm-3 m-b-20">
             <div class="toggle-switch" data-ts-color="blue">
                 <label for="{{$booking->id}}" class="ts-label">{{$booking->name}}</label>
                   <input id="{{$booking->id}}" type="checkbox" hidden="hidden" name="btype_id[]" value="{{$booking->id}}" 
