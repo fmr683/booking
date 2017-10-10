@@ -24,7 +24,7 @@ Route::get('addon/by-day-type/{id}', 'AddonController@byDayType');
 
 Route::resource('booking', 'BookingController');
 Route::patch('booking/deactive/{id}', 'BookingController@deactiveBooking');
-Route::get('booking/check-duplicate/{day_type}/{pm_id}/{b_date}', 'BookingController@checkDuplicateBookings');
+Route::get('booking/check-duplicate/{day_type}/{pm_id}/{b_date}/{bid}', 'BookingController@checkDuplicateBookings');
 
 
 Route::resource('user', 'UserController');

@@ -259,16 +259,18 @@ input[type=number]::-webkit-outer-spin-button {
 
 @if (!empty($booking->id)) 
   getPriceMapping({{ $booking->day_type }}, {{ $booking->pm_id }});
- checkDuplicate({{ $booking->day_type or '' }}, {{ $booking->pm_id or '' }}, {{ $booking->b_date or '' }}) 
+ checkDuplicate({{ $booking->day_type or '' }}, {{ $booking->pm_id or '' }}, "{{ $booking->b_date or '' }}",  {{ $booking->id or '' }}) 
   //getAddonPrice({{ $booking->day_type }}) 
 @endif
 
-function checkDuplicate(dayType, pm_id, date) {
+function checkDuplicate(dayType, pm_id, date, bid) {
 
+  if (bid == undefined || bid == '') bid = 0;
 
   if ((dayType != undefined && dayType !== '') && (pm_id != undefined && pm_id !== '') && (date != undefined && date !== '')) {
-    $.getJSON("/booking/check-duplicate/"+ dayType + '/' + pm_id + '/' + date, function(data) {
+    $.getJSON("/booking/check-duplicate/"+ dayType + '/' + pm_id + '/' + date + '/' + bid, function(data) {
         var i =0;
+        console.log(data);
         if (data[0] !== undefined) {
           $(".warning").show();
         }else {

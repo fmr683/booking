@@ -59,7 +59,7 @@ class Booking extends Model
     public static function checkPossibleDuplicateItem($rarray) {
 
 
-      return DB::table("booking")
+      $queryp = DB::table("booking")
             ->select('booking.id')
             ->join('price_mapping', 'booking.pm_id', '=', 'price_mapping.id')
             ->join('price_mapping_btype', 'booking.pm_id', '=', 'price_mapping_btype.id')
@@ -71,8 +71,16 @@ class Booking extends Model
                 ->from('price_mapping')
                 ->join('price_mapping_btype', 'price_mapping.id', '=', 'price_mapping_btype.id')
                 ->where('price_mapping.id','=',$rarray["pm_id"]);
-            })
-            ->get();
+            });
+
+
+        if (!empty($rarray['bid'])) {
+            $queryp->where('booking.id', '<>', $rarray['bid']);
+        }
+
+        $result= $queryp->get();
+
+        return $result;
 
     }
 

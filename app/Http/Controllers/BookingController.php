@@ -263,7 +263,8 @@ class BookingController extends Controller
 
     public function checkDuplicateBookings(Request $request) {
 
-        $rarray = array('day_type'=>$request->day_type, 'pm_id'=>$request->pm_id, 'b_date'=>$request->b_date);
+        $rarray = array('day_type'=>$request->day_type, 'pm_id'=>$request->pm_id
+        , 'b_date'=>$request->b_date, 'bid'=>$request->bid);
         echo Booking::checkPossibleDuplicateItem($rarray);
         exit;
     }
