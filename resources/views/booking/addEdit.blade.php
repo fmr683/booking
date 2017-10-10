@@ -26,6 +26,11 @@ input[type=number]::-webkit-outer-spin-button {
     </div>
     <div class="card-body card-padding">
 
+ <div class="row">
+         <button class="btn bgm-bluegray waves-effect float-right" onclick="window.location.href='/booking/'">Back</button>
+        </div>
+        <br/>
+
       {!! Form::open(array('route' => array($action["action"], (!empty($booking->id) ? $booking->id : '' )),
       'class' => 'form', 'method' => $action["method"])) !!}
 
@@ -155,15 +160,6 @@ input[type=number]::-webkit-outer-spin-button {
         <input type="hidden"  name="total" value="{{ $booking->total or '0.00' }}" class="form-control " id="total">
       </div>
 
-       <div class="form-group fg-line" >
-          <p class="f-500 c-black m-b-15">Payment</p>
-          <select name="payment_type" id="payment_type" class="form-control pad" {{(empty($booking->id) ? 'required' : '' )}} >
-             <option value="">--Select--</option>
-              <option value="1">Advance</option>
-              <option value="2">Full Payment</option>
-        </select>
-      </div>
-
 
     @if (!empty($booking->id)) 
     <div class="alert  alert-info alert-dismissible" role="alert">
@@ -185,6 +181,14 @@ input[type=number]::-webkit-outer-spin-button {
       </div>
     @endif
 
+ <div class="form-group fg-line" >
+          <p class="f-500 c-black m-b-15">Payment</p>
+          <select name="payment_type" id="payment_type" class="form-control pad" {{(empty($booking->id) ? 'required' : '' )}} >
+             <option value="">--Select--</option>
+              <option value="1">Advance</option>
+              <option value="2">Full Payment</option>
+        </select>
+      </div>
 
       <div class="form-group fg-line" id="advance_div" style="display: none">
         <input type="number"  step=".01" name="advance"  value="{{ (!empty($booking) ? ($booking->total  - $paid) : '')  }}" class="form-control " id="advance" placeholder="Advance">
@@ -219,27 +223,28 @@ input[type=number]::-webkit-outer-spin-button {
 <div class="alert  alert-info alert-dismissible" role="alert">
 <h4>Payment History</h4>
 </div>
-<table style="width:100%">
-  <tr>
-    <th>Sno</th>
-    <th>Paid Type</th> 
-    <th>Paid Amount</th> 
-    <th>Date</th>
-    <th>Action</th>
-  </tr>
+  <div class="table-responsive">
+    <table id="data-table-basic" class="table table-striped">
+      <tr>
+        <th>Sno</th>
+        <th>Paid Type</th> 
+        <th>Paid Amount</th> 
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
 
-  @foreach($bookingPayment as $value)
-    <tr>
-      <td>{{$sno++}}</td>
-      <td>{{($value['payment_type'] == '1' ? 'Advance' : 'Full Payment')}}</td> 
-      <td>{{$value['amount']}}</td>
-      <td>{{$value['paid_date']}}</td>
-      <td><a target="_blank" href='/booking/{{$booking->id}}/?pid={{$value["bpid"]}}&ptype={{$value["payment_type"]}}'>Print</a></td>
-    </tr>
-  @endforeach
+      @foreach($bookingPayment as $value)
+        <tr>
+          <td>{{$sno++}}</td>
+          <td>{{($value['payment_type'] == '1' ? 'Advance' : 'Full Payment')}}</td> 
+          <td>{{$value['amount']}}</td>
+          <td>{{$value['paid_date']}}</td>
+          <td><a target="_blank" href='/booking/{{$booking->id}}/?pid={{$value["bpid"]}}&ptype={{$value["payment_type"]}}'>Print</a></td>
+        </tr>
+      @endforeach
 
-</table>
-
+    </table>
+</div>
 
 
     </div>
@@ -254,7 +259,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 @if (!empty($booking->id)) 
   getPriceMapping({{ $booking->day_type }}, {{ $booking->pm_id }});
-
+ checkDuplicate({{ $booking->day_type or '' }}, {{ $booking->pm_id or '' }}, {{ $booking->b_date or '' }}) 
   //getAddonPrice({{ $booking->day_type }}) 
 @endif
 

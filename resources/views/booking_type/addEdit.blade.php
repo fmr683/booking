@@ -9,6 +9,7 @@
     </div>
 
  <div class="card-body card-padding">
+ 
   {!! Form::open(array('route' => array($action["action"], (!empty($bookingType->id) ? $bookingType->id : '' )),
   'class' => 'form', 'method' => $action["method"])) !!}
 

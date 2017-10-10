@@ -76,6 +76,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
    
+     $full_paid = false;
       DB::beginTransaction();
        try {
            
@@ -90,12 +91,16 @@ class BookingController extends Controller
 
             if ($request['amount'] >= $request['total']) {
                 $request['active'] = 2; // Completed
+                $full_paid = true;
             } else {
                 $request['active'] = 1; // Pending
             }
 
             if (!empty($request['discount']) && $request['discount'] > 0) {
                 $request["total"] = $request["total"]  - (($request['total'] * $request['discount']) / 100);
+                if ($full_paid) {
+                    $request['amount'] = $request["total"];
+                }
             }
 
             $booking = Booking::create($request->all());
@@ -118,11 +123,11 @@ class BookingController extends Controller
         catch (\Exception $e)
         {
             DB::rollBack();
-            return redirect('booking/create')->with('error', "You're trying a duplicate booking");
+            return redirect('booking/create/')->with('error', "You're trying a duplicate booking");
         }
 
 
-        return redirect('booking')->with('success', 'Success!');
+        return redirect('booking/'. $booking->id .'/edit/')->with('success', 'Success!');
     }
 
     /**

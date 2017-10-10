@@ -36,7 +36,7 @@ class CreateBookingTable extends Migration
             $table->decimal('discount', 10, 2)->nullable();
             $table->decimal('total', 10, 2);
             $table->timestamps();
-            $table->unique(array('pm_id','b_date','day_type'));
+            $table->unique(array('pm_id','b_date','day_type','active'));
         });
 
          Schema::create('booking_addon', function (Blueprint $table) {
