@@ -75,7 +75,7 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-   
+
      $full_paid = false;
       DB::beginTransaction();
        try {
@@ -85,15 +85,11 @@ class BookingController extends Controller
 
             if ($request['payment_type'] == 1) {
                 $request['amount'] = $request['advance'];
+                 $request['active'] = 1; // Pending
             } else if ($request['payment_type'] == 2){
                 $request['amount'] = $request['total'];
-            }
-
-            if ($request['amount'] >= $request['total']) {
                 $request['active'] = 2; // Completed
                 $full_paid = true;
-            } else {
-                $request['active'] = 1; // Pending
             }
 
             if (!empty($request['discount']) && $request['discount'] > 0) {
@@ -196,21 +192,16 @@ class BookingController extends Controller
     public function update(Request $request, Booking $booking)
     {
         //
-
         DB::beginTransaction();
         try {
 
 
-            if ($request['payment_type'] == 1) {
-                $request['amount'] = $request['advance'];
-            } else if ($request['payment_type'] == 2){
-                $request['amount'] = $request['total'];
-            }
+            $request['amount'] = $request['advance'];
 
-            if ($request['amount'] >= $request['total']) {
-                $request['active'] = 2; // Completed
-            } else {
-                $request['active'] = 1; // Pending
+            if ($request['payment_type'] == 1) {
+               $request['active'] = 1; // Pending
+            } else if ($request['payment_type'] == 2){
+              $request['active'] = 2; // Completed
             }
 
             Booking::find($booking->id)->update($request->all());

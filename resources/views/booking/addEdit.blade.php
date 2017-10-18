@@ -328,12 +328,19 @@ $('#day_type').on('change', function() {
 
 })
 
+@if (empty($booking->id)) 
+$("input").on( 'input', function() {
+   checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
+});
+@endif
+
+
 $('#b_date').on('input click', function() {
   checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
 })
 
 $('#pm_id').on('change', function() {
-
+    $("#total_with_disc").html('');
     var selected = $(this).find('option:selected');
     var price = selected.data('price'); 
     $("#pm_amount").html(price)
