@@ -33,7 +33,7 @@ class Booking extends Model
             ->get();
     }
 
-    public static function getRecentPendingOrders() {
+    public static function getRecentPendingOrders($rarray) {
 
    
 
@@ -43,6 +43,7 @@ class Booking extends Model
             ->join('customers', 'booking.c_id', '=', 'customers.id')
             ->join('price_mapping_btype', 'booking.pm_id', '=', 'price_mapping_btype.id')
             ->join('booking_type', 'price_mapping_btype.btype_id', '=', 'booking_type.id')
+            ->whereBetween('booking.b_date',array($rarray["sdate"],$rarray["edate"]))
             ->whereIn('active', array(1,2))
             ->groupBy('booking.id')
             ->groupBy('booking.total')

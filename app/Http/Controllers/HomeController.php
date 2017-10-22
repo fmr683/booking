@@ -22,9 +22,17 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::getRecentPendingOrders();
-        return view('home',compact('bookings'));
+        $rarray = array();
+        if (empty($request["sdate"])) { $rarray['sdate'] = date('Y-m-d', strtotime('-30 days')); } 
+        else { $rarray['sdate'] = $request["sdate"];}
+        
+        if (empty($request["edate"])) { $rarray['edate'] = date('Y-m-d'); } 
+        else { $rarray['edate'] = $request["edate"];}
+        
+
+        $bookings = Booking::getRecentPendingOrders($rarray);
+        return view('home',compact('bookings','rarray'));
     }
 }
