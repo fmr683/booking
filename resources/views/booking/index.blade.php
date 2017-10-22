@@ -93,9 +93,9 @@
                     <td>{{ $dayTypes[$booking->day_type] }}</td>
                     <td>{{ $booking->c_name }}</td>
                     <td>{{ $booking->c_number }}</td>
-                    <td>{{ $booking->total }}</td>
-                    <td>{{ $booking->amount }}</td>
-                    <td>{{ $booking->total - $booking->amount }}</td>
+                    <td>{{ number_format($booking->total,2) }}</td>
+                    <td>{{ number_format($booking->amount,2) }}</td>
+                    <td>{{ number_format($booking->total - $booking->amount,2) }}</td>
 
                     <td><a href='/booking/{{ $booking->id }}/edit/'>Edit</a></td>
                 </tr>

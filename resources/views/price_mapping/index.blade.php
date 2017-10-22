@@ -35,7 +35,7 @@
                 <tr>
                     <td>{{$i++}}</td>
                     <td>{{ $pm->name }}</td>
-                    <td>{{ $pm->price }}</td>
+                    <td>{{ number_format($pm->price,2) }}</td>
                     <td>{{ $dayTypes[$pm->day_type] }}</td>
                     <td><a href='/price-mapping/{{ $pm->id }}/edit/'>Edit</a></td>
                 </tr>

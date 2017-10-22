@@ -88,13 +88,15 @@ input[type=number]::-webkit-outer-spin-button {
 
       <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Hall Amount</p>
-          <p class="f-500 c-red m-b-15" id="pm_amount">{{ $booking->h_total or '0.00' }}</p>
+          <p class="f-500 c-red m-b-15" id="pm_amount">
+          <?=number_format(!empty($booking->h_total) ? $booking->h_total: 0,2)?>
+          </p>
           <input type="hidden" name="h_total"  step=".01" id='h_total'  value="{{ $booking->h_total or '0.00' }}">
       </div>
 
       <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Addon Amount</p>
-          <p class="f-500 c-red m-b-15" id="addon_amount">{{ $booking->add_total or '0.00' }}</p>
+          <p class="f-500 c-red m-b-15" id="addon_amount"><?=number_format(!empty($booking->add_total) ? $booking->add_total: 0,2)?></p>
           <input type="hidden" name="add_total"  step=".01" id='add_total'  value="{{ $booking->add_total or '0.00' }}">
       </div>
 
@@ -103,7 +105,7 @@ input[type=number]::-webkit-outer-spin-button {
           <p class="f-500 c-black m-b-15">Total Booking Price</p>
           <p class="f-500 c-red m-b-15" id="tt_total">
           @if (!empty($booking->id))
-          {{ ($booking->h_total + $booking->add_total) }}
+          {{ number_format(($booking->h_total + $booking->add_total),2) }}
           @else 
           {{ '0.00'}}
           @endif
@@ -138,8 +140,9 @@ input[type=number]::-webkit-outer-spin-button {
 
       @if (empty($booking->id)) 
        <div class="form-group fg-line">
-        <label for="name">Discount (%)</label>
-        <input type="number" step=".01"  name="discount" value="{{ $booking->discount or '0.00' }}" class="form-control " id="discount" placeholder="Discount">
+       <label for="name">Discount</label><br/>
+        <label for="name">(<input type="checkbox" value="1" name="discount_type">%) &nbsp;&nbsp;&nbsp;&nbsp; (<input type="checkbox" value="2" name="discount_type">Rs)</label>
+        <input type="number" step=".01"  name="discount" min="1" value="{{ $booking->discount or '0.00' }}" class="form-control " id="discount" placeholder="Discount">
       </div>
       @else
         <div class="form-group fg-line" >
@@ -149,14 +152,14 @@ input[type=number]::-webkit-outer-spin-button {
 
         <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Applied Discount</p>
-          <p class="f-500 c-red m-b-15" id="pm_amount">{{ $booking->discount or '0.00' }}</p>
+          <p class="f-500 c-red m-b-15" id="pm_amount"><?=number_format(!empty($booking->discount) ? $booking->discount: 0,2)?></p>
         </div>
       @endif
 
 
       <div class="form-group fg-line">
         <label for="name">Final Price</label>
-        <p class="f-500 c-red m-b-15" id="total_with_disc">{{ $booking->total or '0.00' }}</p>
+        <p class="f-500 c-red m-b-15" id="total_with_disc"><?=number_format(!empty($booking->total) ? $booking->total: 0,2)?></p>
         <input type="hidden"  name="total" value="{{ $booking->total or '0.00' }}" class="form-control " id="total">
       </div>
 
@@ -173,11 +176,11 @@ input[type=number]::-webkit-outer-spin-button {
         $paid += $value->amount
         @endphp
       @endforeach        
-       {{$paid }}</p>
+       {{number_format($paid,2) }}</p>
       </div>
       <div class="form-group fg-line" >
         <p class="f-500 c-black m-b-15">Remaing</p>
-        <p class="f-500 c-red m-b-15" id="balance">{{ $booking->total  - $paid }}</p>
+        <p class="f-500 c-red m-b-15" id="balance">{{ number_format($booking->total  - $paid,2) }}</p>
       </div>
     @endif
 
@@ -191,7 +194,7 @@ input[type=number]::-webkit-outer-spin-button {
       </div>
 
       <div class="form-group fg-line" id="advance_div" style="display: none">
-        <input type="number"  step=".01" name="advance"  value="{{ (!empty($booking) ? ($booking->total  - $paid) : '')  }}" class="form-control " id="advance" placeholder="Advance">
+        <input type="number"  step=".01" min="0" name="advance"  value="{{ (!empty($booking) ? ($booking->total  - $paid) : '')  }}" class="form-control " id="advance" placeholder="Advance">
       </div>
 
     <div class="alert alert-warning warning" role="alert" style="display: none">There few overlapping booking exist with the selected Halls</div>
@@ -237,7 +240,7 @@ input[type=number]::-webkit-outer-spin-button {
         <tr>
           <td>{{$sno++}}</td>
           <td>{{($value['payment_type'] == '1' ? 'Advance' : 'Full Payment')}}</td> 
-          <td>{{$value['amount']}}</td>
+          <td>{{number_format($value['amount'],2)}}</td>
           <td>{{$value['paid_date']}}</td>
           <td><a target="_blank" href='/booking/{{$booking->id}}/?pid={{$value["bpid"]}}&ptype={{$value["payment_type"]}}'>Print</a></td>
         </tr>

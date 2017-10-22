@@ -36,7 +36,7 @@
                     <td>{{$i++}}</td>
                     <td>{{ $addon->add_name }}</td>
                     <td>{{ $dayTypes[$addon->day_type] }}</td>
-                    <td>{{ $addon->price }}</td>
+                    <td>{{ number_format($addon->price,2) }}</td>
                     <td><a href='/addon/{{ $addon->id }}/edit/'>Edit</a></td>
                 </tr>
             @endforeach

@@ -93,7 +93,12 @@ class BookingController extends Controller
             }
 
             if (!empty($request['discount']) && $request['discount'] > 0) {
-                $request["total"] = $request["total"]  - (($request['total'] * $request['discount']) / 100);
+                if ($request['discount_type'] == 1) { // % percentage
+                    $request["total"] = $request["total"]  - (($request['total'] * $request['discount']) / 100);
+                } else if($request['discount_type'] == 2) { // Rs discount
+                    $request["total"] = $request["total"] - $request['discount'];
+                }
+                
                 if ($full_paid) {
                     $request['amount'] = $request["total"];
                 }
@@ -233,7 +238,7 @@ class BookingController extends Controller
             return redirect('booking/'. $booking->id .'/edit/');
         }
 
-        return redirect('booking')->with('success', 'Success!');
+        return redirect('booking/'. $booking->id .'/edit/')->with('success', 'Success!');
     }
 
     /**

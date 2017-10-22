@@ -71,6 +71,14 @@
                 <ul class="main-menu">
                     <li><a href="/home"><i class="zmdi zmdi-home"></i> Home</a></li>
                     <li class="sub-menu toggled">
+                        <a href=""><i class="zmdi zmdi-view-compact"></i>Booking</a>
+                        <ul>
+                            <li><a href="/booking/">View Bookings</a></li>
+                            <li><a href="/booking/create/">Create Booking</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="sub-menu toggled">
                         <a href=""><i class="zmdi zmdi-view-compact"></i> Booking Type</a>
                         <ul>
                             <li><a href="/booking-type/">View Booking Types</a></li>
@@ -86,7 +94,7 @@
                     </li>
 
                     <li class="sub-menu toggled">
-                        <a href=""><i class="zmdi zmdi-view-compact"></i>Addon</a>
+                        <a href=""><i class="zmdi zmdi-view-compact"></i>Extras</a>
                         <ul>
                             <li><a href="/addon/">View Addons</a></li>
                             <li><a href="/addon/create/">Create Addon</a></li>
@@ -101,13 +109,7 @@
                         </ul>
                     </li>
 
-                    <li class="sub-menu toggled">
-                        <a href=""><i class="zmdi zmdi-view-compact"></i>Booking</a>
-                        <ul>
-                            <li><a href="/booking/">View Bookings</a></li>
-                            <li><a href="/booking/create/">Create Booking</a></li>
-                        </ul>
-                    </li>
+                  
                 </ul>
             </aside>
 
