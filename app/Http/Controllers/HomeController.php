@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+      
         $rarray = array();
         if (empty($request["sdate"])) { $rarray['sdate'] = date('Y-m-d', strtotime('-30 days')); } 
         else { $rarray['sdate'] = $request["sdate"];}

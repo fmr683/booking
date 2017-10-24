@@ -162,7 +162,7 @@ class BookingController extends Controller
         if ($payment_type ==2) { // full payment
            $data_arr = array('title' => 'FINAL INVOICE','payment_type'=>$payment_type);
         } else {
-           $data_arr = array('title' => 'ADVANCE INVOICE','payment_type'=>$payment_type);
+           $data_arr = array('title' => 'RECEIPT','payment_type'=>$payment_type);
         }
 
          return view('booking.receipt',compact('action','booking',

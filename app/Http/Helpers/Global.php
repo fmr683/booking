@@ -7,3 +7,7 @@ function dayTypes() {
 function bookingStatus() {
     return array(1 => "Pending" , 2 => "Completed", 3 => "Cancelled");
 }
+
+function bmUsers() {
+    return array(4);
+}

@@ -78,6 +78,7 @@
                         </ul>
                     </li>
 
+                    @if (!in_array(Auth::user()->id, bmUsers())) 
                     <li class="sub-menu toggled">
                         <a href=""><i class="zmdi zmdi-view-compact"></i> Booking Type</a>
                         <ul>
@@ -108,7 +109,7 @@
                             <li><a href="/user/create/">Create User</a></li>
                         </ul>
                     </li>
-
+                    @endif
                   
                 </ul>
             </aside>
