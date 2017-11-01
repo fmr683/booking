@@ -34,7 +34,7 @@ input[type=number]::-webkit-outer-spin-button {
       {!! Form::open(array('route' => array($action["action"], (!empty($booking->id) ? $booking->id : '' )),
       'class' => 'form', 'method' => $action["method"])) !!}
 
-          <div class="alert alert-warning warning" role="alert" style="display: none">There few overlapping booking exist with the selected Halls</div>
+          <div class="alert alert-warning warning" role="alert" style="display: none">Hall Unavailable, Please select a Different Hall Type or Select New Date</div>
 
 <div class="alert  alert-info alert-dismissible" role="alert">
    <h4>Booking Information</h4>
@@ -65,7 +65,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
     <div class="form-group fg-line" >
-      <p class="f-500 c-black m-b-15">Addons</p>
+      <p class="f-500 c-black m-b-15">Extras</p>
         <div id="addon">
           @if (!empty($booking->id)) 
             @foreach($addons as $key => $value) 
@@ -95,7 +95,7 @@ input[type=number]::-webkit-outer-spin-button {
       </div>
 
       <div class="form-group fg-line" >
-          <p class="f-500 c-black m-b-15">Addon Amount</p>
+          <p class="f-500 c-black m-b-15">Extras Amount</p>
           <p class="f-500 c-red m-b-15" id="addon_amount"><?=number_format(!empty($booking->add_total) ? $booking->add_total: 0,2)?></p>
           <input type="hidden" name="add_total"  step=".01" id='add_total'  value="{{ $booking->add_total or '0.00' }}">
       </div>
@@ -139,11 +139,17 @@ input[type=number]::-webkit-outer-spin-button {
       </div>
 
       @if (empty($booking->id)) 
-       <div class="form-group fg-line">
-       <label for="name">Discount</label><br/>
-        <label for="name">(<input type="checkbox" value="1" name="discount_type">%) &nbsp;&nbsp;&nbsp;&nbsp; (<input type="checkbox" value="2" name="discount_type">Rs)</label>
-        <input type="number" step=".01"  name="discount" min="1" value="{{ $booking->discount or '0.00' }}" class="form-control " id="discount" placeholder="Discount">
+       <div class="form-group fg-line" >
+          <p class="f-500 c-black m-b-15">Discount</p>
+          <select name="discount_type" id="discount_type" class="form-control pad" >
+             <option value="">--Select--</option>
+              <option value="1">%</option>
+              <option value="2">Rs</option>
+        </select>
+        <br/>
+         <input type="number" step=".01"  name="discount" min="0" value="{{ $booking->discount or '0.00' }}" class="form-control " id="discount" placeholder="Discount">
       </div>
+
       @else
         <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Status</p>
@@ -179,7 +185,7 @@ input[type=number]::-webkit-outer-spin-button {
        {{number_format($paid,2) }}</p>
       </div>
       <div class="form-group fg-line" >
-        <p class="f-500 c-black m-b-15">Remaing</p>
+        <p class="f-500 c-black m-b-15">Outstanding</p>
         <p class="f-500 c-red m-b-15" id="balance">{{ number_format($booking->total  - $paid,2) }}</p>
       </div>
     @endif
@@ -199,7 +205,7 @@ input[type=number]::-webkit-outer-spin-button {
 
     <div class="alert alert-warning warning" role="alert" style="display: none">There few overlapping booking exist with the selected Halls</div>
 
-      <button type="submit" class="btn btn-primary btn-sm m-t-10">Submit</button>
+      <button type="submit" class="submit btn btn-primary btn-sm m-t-10">Submit</button>
 
       {!! Form::close() !!}
 
@@ -214,7 +220,7 @@ input[type=number]::-webkit-outer-spin-button {
 {!! Form::open(array('action' => array('BookingController@deactiveBooking', !empty($booking->id) ? $booking->id : '' ),
  'class' => 'form', 'method' => 'PATCH')) !!}
  <input type="hidden" name="active" value="3" />
-  <button type="submit" class="btn btn-danger btn-sm m-t-10">Cancel the Booking</button>
+  <button type="submit" class=" btn btn-danger btn-sm m-t-10">Cancel the Booking</button>
 {!! Form::close() !!}
 @endif
 </div>
@@ -275,8 +281,10 @@ function checkDuplicate(dayType, pm_id, date, bid) {
         var i =0;
         console.log(data);
         if (data[0] !== undefined) {
+          $(".submit").hide();
           $(".warning").show();
         }else {
+          $(".submit").show();
           $(".warning").hide();
            
         }
@@ -322,14 +330,26 @@ function getAddonPrice(day_type) {
 }
 
 $('#day_type').on('change', function() {
-
+forcAllValuetoEmpty();
   getPriceMapping(this.value)
 
   getAddonPrice(this.value) 
 
   checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
 
+  
 })
+
+
+function forcAllValuetoEmpty() {
+   $("#total_with_disc").html('0.00');
+    $("#h_total").val(0.00);
+    $("#pm_amount").html('0.00');
+    $("#addon_amount").html('0.00');
+    $("#total").val(0.00)
+    $("#add_total").val(0.00);
+    $("#tt_total").html('0.00');
+}
 
 @if (empty($booking->id)) 
 $("input").on( 'input', function() {
@@ -346,7 +366,7 @@ $('#pm_id').on('change', function() {
     $("#total_with_disc").html('');
     var selected = $(this).find('option:selected');
     var price = selected.data('price'); 
-    $("#pm_amount").html(price)
+    $("#pm_amount").html(numberWithCommas(price))
     $("#h_total").val(price)
     total()
     checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
@@ -354,15 +374,17 @@ $('#pm_id').on('change', function() {
 
 $(document).on("change", "input[name='addon[]']", function () {
     var addon_price = parseFloat($(this).data('addon-price'));
-    var get_addon_price = parseFloat($("#addon_amount").html());
+    var get_addon_price = parseFloat($("#addon_amount").html().replace(/,/g, ""));
 
 
     if (this.checked) {
-      $("#addon_amount").html((get_addon_price + addon_price).toFixed(2))
+      var x = get_addon_price + addon_price;
+      $("#addon_amount").html(numberWithCommas(x.toFixed(2)))
      // $("#addon_amount").val((get_addon_price + addon_price).toFixed(2))
      total(addon_price)
     } else {
-      $("#addon_amount").html((get_addon_price - addon_price).toFixed(2))
+      var x = get_addon_price - addon_price;
+      $("#addon_amount").html(numberWithCommas(x.toFixed(2)))
      // $("#addon_amount").val((get_addon_price - addon_price).toFixed(2))
      total(-addon_price)
     }
@@ -402,20 +424,22 @@ function total(t_addon) {
 
   if (t_addon == undefined) t_addon = null
 
-  var hallAmount = parseFloat($("#pm_amount").html());
-  var addonAmount = parseFloat($("#addon_amount").html());
+  var hallAmount = parseFloat($("#pm_amount").html().replace(/,/g, ""));
+  var addonAmount = parseFloat($("#addon_amount").html().replace(/,/g, ""));
   $("#add_total").val(addonAmount);
   var total = hallAmount + addonAmount;
+  total = numberWithCommas(total.toFixed(2));
 
    $("#tt_total").html(total); // Total Booking info
 
-   var tot_with_dic = parseFloat($("#total_with_disc").html());
+   var tot_with_dic = parseFloat($("#total_with_disc").html().replace(/,/g, ""));
    if (tot_with_dic > 0) {
-
-      $("#total_with_disc").html(tot_with_dic + t_addon)
-      $("#total").val(tot_with_dic + addonAmount)
+      var y = numberWithCommas(tot_with_dic + t_addon);
+      $("#total_with_disc").html(y.toFixed(2))
+      var z = tot_with_dic + addonAmount;
+      $("#total").val(z.toFixed(2))
    } else {
-    $("#total_with_disc").html(total)
+    $("#total_with_disc").html(numberWithCommas(total)).toFixed(2)
     $("#total").val(total)
    }
   
@@ -429,6 +453,10 @@ $('form').on('focus', 'input[type=number]', function (e) {
 $('form').on('blur', 'input[type=number]', function (e) {
   $(this).off('mousewheel.disableScroll')
 })
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 </script>
 @endsection

@@ -11,6 +11,13 @@
   @endphp
 @endforeach  
 
+<style type="text/css" media="print">
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;  /* this affects the margin in the printer settings */
+}
+</style>
+
 <table style="width:100%">
   <tr>
     <td><h1>DATA BANQUET HALL</h1>
@@ -73,28 +80,28 @@
       <table>
         <tr>
           <td><b>Grand Total:</b></td>
-          <td>{{ $booking->total }}</td>
+          <td>{{ number_format($booking->total, 2) }}</td>
         </tr>
 
         
         @if ($data_arr["payment_type"] == 2)
          <tr>
           <td><b>Discount Amount:</b></td>
-          <td>{{ $booking->discount }}</td>
+          <td>{{ number_format($booking->discount, 2) }}</td>
         </tr>
          <tr>
           <td><b>Total Paid Amount:</b></td>
-          <td>{{ number_format($paid , 2, '.', '')}}</td>
+          <td>{{ number_format($paid , 2)}}</td>
         </tr>
         @else
          <tr>
           <td><b>Advance Payment:</b></td>
-          <td>{{ $bookingPayment[0]->amount or '' }}</td>
+          <td><?= !empty($bookingPayment[0]->amount) ? number_format($bookingPayment[0]->amount, 2) : 0.00 ?></td>
         </tr>
          <tr>
           <td><b>Balance Payment:</b></td>
           <td>
-            {{number_format($booking->total - $paid, 2, '.', '') }}
+            {{number_format($booking->total - $paid, 2) }}
           </td>
         </tr>
 

@@ -10,12 +10,12 @@
 
 <div class="card">
     <div class="card-header">
-        <h2>Addons</h2>
+        <h2>Extras</h2>
     </div>
     
    <div class="card-body card-padding">
     <div class="row">
-         <button class="btn bgm-blue waves-effect float-right" onclick="window.location.href='/addon/create/'">Create Addons</button>
+         <button class="btn bgm-blue waves-effect float-right" onclick="window.location.href='/addon/create/'">Create Extras</button>
         </div>
         <br/>
 

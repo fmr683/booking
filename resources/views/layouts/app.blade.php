@@ -97,8 +97,8 @@
                     <li class="sub-menu toggled">
                         <a href=""><i class="zmdi zmdi-view-compact"></i>Extras</a>
                         <ul>
-                            <li><a href="/addon/">View Addons</a></li>
-                            <li><a href="/addon/create/">Create Addon</a></li>
+                            <li><a href="/addon/">View Extras</a></li>
+                            <li><a href="/addon/create/">Create Extras</a></li>
                         </ul>
                     </li>
 

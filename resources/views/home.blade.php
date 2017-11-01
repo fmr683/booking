@@ -29,7 +29,7 @@
             <!-- Recent Items -->
             <div class="card">
                 <div class="card-header">
-                    <h2>Recent Bookings</h2>
+                    <h2>Search Existing Bookings</h2>
                 </div>
                 
                 <div class="card-body m-t-0">

@@ -6,7 +6,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h2>Addons</h2>
+        <h2>Extras</h2>
     </div>
 
  <div class="card-body card-padding">
@@ -15,8 +15,8 @@
  'class' => 'form', 'method' => $action["method"])) !!}
 
  <div class="form-group fg-line">
-      <label for="name">Addon Name</label>
-      <input type="text"  name="add_name" value="{{ $addon->add_name or '' }}" class="form-control input-sm" id="add_name" placeholder="Addon Name" required>
+      <label for="name">Extras Name</label>
+      <input type="text"  name="add_name" value="{{ $addon->add_name or '' }}" class="form-control input-sm" id="add_name" placeholder="Extras Name" required>
   </div>
 
  <div class="form-group fg-line" >
@@ -29,7 +29,7 @@
     </div>
 
  <div class="form-group fg-line">
-      <label for="name">Addon price</label>
+      <label for="name">Extras price</label>
       <input type="number"  name="price" value="{{ $addon->price or '' }}" class="form-control input-sm" id="price" placeholder="Addon Price" required>
   </div>
 

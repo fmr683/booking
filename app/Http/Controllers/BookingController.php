@@ -41,7 +41,7 @@ class BookingController extends Controller
         
         $bookingStatus = array_flip(bookingStatus());
         if (empty($request["bstatus"]) && !isset($request["bstatus"]) ) $rarray['bstatus'] = array($bookingStatus["Pending"],$bookingStatus["Completed"]); 
-        elseif (empty($request["dtype"])) $rarray['bstatus'] =  $bookingStatus;
+        elseif (empty($request["bstatus"])) $rarray['bstatus'] =  $bookingStatus;
         else $rarray['bstatus'] = array($request["bstatus"]);
 
         $dayTypes = array_flip(dayTypes());
@@ -75,6 +75,11 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+
+        $duplicate = "Hall Unavailable, Please select a Different Hall Type or Select New Date";
+        if ($this->checkDuplicateBookings($request, false)) { // overlapping booking 
+                return redirect('booking/create/')->with('error', $duplicate);
+        }
 
      $full_paid = false;
       DB::beginTransaction();
@@ -124,7 +129,8 @@ class BookingController extends Controller
         catch (\Exception $e)
         {
             DB::rollBack();
-            return redirect('booking/create/')->with('error', "You're trying a duplicate booking");
+            dd($e);
+            return redirect('booking/create/')->with('error', $duplicate);
         }
 
 
@@ -257,11 +263,16 @@ class BookingController extends Controller
         return redirect('booking')->with('success', 'Success!');
     }
 
-    public function checkDuplicateBookings(Request $request) {
+    public function checkDuplicateBookings(Request $request, $ajax=true) {
 
         $rarray = array('day_type'=>$request->day_type, 'pm_id'=>$request->pm_id
         , 'b_date'=>$request->b_date, 'bid'=>$request->bid);
-        echo Booking::checkPossibleDuplicateItem($rarray);
+
+      //  dd($rarray);
+        if ($ajax)
+            echo Booking::checkPossibleDuplicateItem($rarray);
+        else 
+            return Booking::checkPossibleDuplicateItem($rarray);
         exit;
     }
 
