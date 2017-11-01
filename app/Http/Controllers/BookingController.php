@@ -77,7 +77,8 @@ class BookingController extends Controller
     {
 
         $duplicate = "Hall Unavailable, Please select a Different Hall Type or Select New Date";
-        if ($this->checkDuplicateBookings($request, false)) { // overlapping booking 
+
+        if (!empty($this->checkDuplicateBookings($request, false)[0])) { // overlapping booking 
                 return redirect('booking/create/')->with('error', $duplicate);
         }
 

@@ -281,10 +281,10 @@ function checkDuplicate(dayType, pm_id, date, bid) {
         var i =0;
         console.log(data);
         if (data[0] !== undefined) {
-          $(".submit").hide();
+        //  $(".submit").hide();
           $(".warning").show();
         }else {
-          $(".submit").show();
+         // $(".submit").show();
           $(".warning").hide();
            
         }
@@ -434,8 +434,9 @@ function total(t_addon) {
 
    var tot_with_dic = parseFloat($("#total_with_disc").html().replace(/,/g, ""));
    if (tot_with_dic > 0) {
-      var y = numberWithCommas(tot_with_dic + t_addon);
-      $("#total_with_disc").html(y.toFixed(2))
+      var n = tot_with_dic + t_addon;
+      var y = numberWithCommas(n.toFixed(2));
+      $("#total_with_disc").html(y)
       var z = tot_with_dic + addonAmount;
       $("#total").val(z.toFixed(2))
    } else {

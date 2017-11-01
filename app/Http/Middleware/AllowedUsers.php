@@ -17,7 +17,7 @@ class AllowedUsers
     public function handle($request, Closure $next)
     {
         $userId = bmUsers();
-        $routes = array('booking.edit','booking.create','booking.index','booking.show','home','');
+        $routes = array('booking.edit','booking.create','booking.index', 'booking.store', 'booking.update', 'booking.show','home','');
 
 
         switch($request->route()->getName()) {
