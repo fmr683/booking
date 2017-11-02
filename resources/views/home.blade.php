@@ -63,6 +63,9 @@
                         </div>
                     </form>
                     </div>
+                     <div class="card-header">
+                        <h2>Recent Bookings</h2>
+                    </div>
                     @if (empty($bookings[0]))
                         <div class="card-body card-padding"> <h3>{{ 'Sorry No Reocords Were Found' }}</h3></div>
                     @else
@@ -79,7 +82,7 @@
                                     <tr>
                                         <td class="f-500 c-cyan">{{$value->name}}</td>
                                         <td>{{$value->b_date}}</td>
-                                        <td class="f-500 c-cyan">{{$value->total}}</td>
+                                        <td class="f-500 c-cyan">{{number_format($value->total,2)}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
