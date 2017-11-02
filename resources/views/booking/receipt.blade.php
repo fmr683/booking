@@ -7,7 +7,8 @@
 
  @foreach($totBookingPayment as $value)
   @php
-  $paid += $value->amount
+  $last_paid = $value->amount;
+  $paid += $value->amount;
   @endphp
 @endforeach  
 
@@ -89,6 +90,11 @@
           <td><b>Discount Amount:</b></td>
           <td>{{ number_format($booking->discount, 2) }}</td>
         </tr>
+        <tr>
+          <td><b>Paid Amount:</b></td>
+          <td>{{ number_format($last_paid , 2)}}</td>
+        </tr>
+
          <tr>
           <td><b>Total Paid Amount:</b></td>
           <td>{{ number_format($paid , 2)}}</td>
