@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
       
         $rarray = array();
-        if (empty($request["sdate"])) { $rarray['sdate'] = date('Y-m-d', strtotime('-30 days')); } 
+        if (empty($request["sdate"])) { $rarray['sdate'] = date('Y-m-d', strtotime('-14 days')); } 
         else { $rarray['sdate'] = $request["sdate"];}
         
         if (empty($request["edate"])) { $rarray['edate'] = date('Y-m-d'); } 
