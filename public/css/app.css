@@ -5399,7 +5399,7 @@ a.thumbnail.active {
 .alert-warning {
   background-color: rgba(255, 193, 7, 0.7);
   border-color: transparent;
-  color: #ffffff;
+  color: #000;
 }
 .alert-warning hr {
   border-top-color: rgba(0, 0, 0, 0);

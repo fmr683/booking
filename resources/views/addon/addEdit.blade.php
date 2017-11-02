@@ -38,9 +38,9 @@
 {!! Form::close() !!}
 
 @if (!empty($addon->id)) 
-
+<br/>
   <div class="row">
-    <div class="col-sm-10 col-xs-6"></div>
+    <div class="col-sm-10 col-xs-6">  <div class="alert alert-warning" role="alert">If there are bookings attached to <b>{{ $addon->add_name or '' }}</b>, then if you delete it; related booking will not appear</b> </div></div>
     <div class="col-sm-2 col-xs-6">
 {!! Form::open(array('route' => array($action["action"], !empty($addon->id) ? $addon->id : '' ),
  'class' => 'form', 'method' => 'DELETE')) !!}

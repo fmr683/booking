@@ -15,7 +15,7 @@ class Booking extends Model
     public static function getAllBookings($rarray) {
 
       return DB::table("booking")
-            ->select('booking.id','booking.total','booking.day_type','booking.b_date','customers.c_name','customers.c_number', 
+            ->select('booking.id','booking.active','booking.total','booking.day_type','booking.b_date','customers.c_name','customers.c_number', 
             DB::raw("(SELECT SUM(booking_payment.amount) FROM booking_payment WHERE id = booking.id) AS amount"), DB::raw("GROUP_CONCAT(booking_type.name ORDER BY booking_type.name ASC SEPARATOR ', ') AS name"))
             ->join('customers', 'booking.c_id', '=', 'customers.id')
             ->join('price_mapping_btype', 'booking.pm_id', '=', 'price_mapping_btype.id')
@@ -27,6 +27,7 @@ class Booking extends Model
             ->groupBy('booking.total')
             ->groupBy('booking.day_type')
             ->groupBy('booking.b_date')
+            ->groupBy('booking.active')
             ->groupBy('customers.c_name')
             ->groupBy('customers.c_number')
             ->orderBy('booking.id','DESC')

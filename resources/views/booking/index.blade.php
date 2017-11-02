@@ -3,6 +3,7 @@
 @section('content')
 
 @php 
+
     $i=1;
     $dayTypes = dayTypes();
     $bookingStatus = bookingStatus();
@@ -53,7 +54,7 @@
                       <select class="chosen" data-placeholder="Choose Day Type" name="dtype">
                       <option value="">Day Type</option>
                       @foreach(dayTypes() as $key => $dayType)
-                        <option value="{{$key}}" {{ (!empty($priceMapping) && $priceMapping->day_type == $key ? 'selected' : '')  }}>{{$dayType}}</option>
+                        <option value="{{$key}}" {{ (!empty($rarray['dtype'][0]) && $rarray['dtype'][0] == $key ? 'selected' : '')}}>{{$dayType}}</option>
                       @endforeach
                     </select>
                 </div>
@@ -81,6 +82,7 @@
                     <th data-column-id="sender">Total Booking Amount</th>
                     <th data-column-id="sender">Paid Amount</th>
                     <th data-column-id="sender">Outstanding</th>
+                    <th data-column-id="sender">Status</th>
                     <th data-column-id="received" data-order="desc">Action</th>
                 </tr>
             </thead>
@@ -96,7 +98,7 @@
                     <td>{{ number_format($booking->total,2) }}</td>
                     <td>{{ number_format($booking->amount,2) }}</td>
                     <td>{{ number_format($booking->total - $booking->amount,2) }}</td>
-
+                    <td>{{ $bookingStatus[$booking->active] }}</td>
                     <td><a href='/booking/{{ $booking->id }}/edit/'>Edit</a></td>
                 </tr>
             @endforeach

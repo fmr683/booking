@@ -205,7 +205,11 @@ input[type=number]::-webkit-outer-spin-button {
 
     <div class="alert alert-warning warning" role="alert" style="display: none">There few overlapping booking exist with the selected Halls</div>
 
+     @if (empty($booking->id) || (!empty($booking->active) && $booking->active == 1))
       <button type="submit" class="submit btn btn-primary btn-sm m-t-10">Submit</button>
+    @else
+     <div class="alert alert-warning" role="alert">Sorry you cannot edit the booking because it's either Completed/Canceled </div>
+    @endif
 
       {!! Form::close() !!}
 
@@ -216,7 +220,7 @@ input[type=number]::-webkit-outer-spin-button {
   <div class="row">
     <div class="col-sm-10 col-xs-6"></div>
     <div class="col-sm-2 col-xs-6"> 
-@if (!empty($booking->active) && $booking->active == 1) 
+@if (!empty($booking->active) && ($booking->active == 1 || $booking->active == 2)) 
 {!! Form::open(array('action' => array('BookingController@deactiveBooking', !empty($booking->id) ? $booking->id : '' ),
  'class' => 'form', 'method' => 'PATCH')) !!}
  <input type="hidden" name="active" value="3" />
@@ -437,7 +441,7 @@ function total(t_addon) {
       var n = tot_with_dic + t_addon;
       var y = numberWithCommas(n.toFixed(2));
       $("#total_with_disc").html(y)
-      var z = tot_with_dic + addonAmount;
+      var z = tot_with_dic + t_addon;
       $("#total").val(z.toFixed(2))
    } else {
     $("#total_with_disc").html(numberWithCommas(total)).toFixed(2)
