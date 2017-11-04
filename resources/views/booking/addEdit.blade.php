@@ -188,6 +188,8 @@ input[type=number]::-webkit-outer-spin-button {
         <p class="f-500 c-black m-b-15">Outstanding</p>
         <p class="f-500 c-red m-b-15" id="balance">{{ number_format($booking->total  - $paid,2) }}</p>
       </div>
+      @else
+      <p class="f-500 c-red m-b-15" id="paid"></p>
     @endif
    
 
