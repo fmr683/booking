@@ -38,12 +38,12 @@
                         <div class="row">
                             <div class="col-sm-4">
                             <div class="form-group fg-line">
-                                <input type="text" name="sdate" value="{{ $rarray['sdate'] or ''}}" placeholder="Start date"  class="form-control date-picker" id="sdate" required>
+                                <input type="text" name="sdate" value="{{ $rarray['sdate'] or date('Y-m-d', strtotime('-14 days')) }}" placeholder="Start date"  class="form-control date-picker" id="sdate" required>
                             </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="fg-line">
-                                    <input type="text" name="edate" value="{{ $rarray['edate'] or ''}}" placeholder="End date"  class="form-control date-picker" id="edate" required>
+                                    <input type="text" name="edate" value="{{ $rarray['edate'] or date('Y-m-d')}}" placeholder="End date"  class="form-control date-picker" id="edate" required>
                             </div>
                             </div>
                             <div class="col-sm-4">

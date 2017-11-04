@@ -34,7 +34,7 @@ input[type=number]::-webkit-outer-spin-button {
       {!! Form::open(array('route' => array($action["action"], (!empty($booking->id) ? $booking->id : '' )),
       'class' => 'form', 'method' => $action["method"])) !!}
 
-          <div class="alert alert-warning warning" role="alert" style="display: none">Hall Unavailable, Please select a Different Hall Type or Select New Date</div>
+          <div class="alert alert-warning warning" role="alert" style="display: none">Hall Unavailable, Please select a Different Hall Type or Select New Date.</div>
 
 <div class="alert  alert-info alert-dismissible" role="alert">
    <h4>Booking Information</h4>
@@ -189,6 +189,7 @@ input[type=number]::-webkit-outer-spin-button {
         <p class="f-500 c-red m-b-15" id="balance">{{ number_format($booking->total  - $paid,2) }}</p>
       </div>
     @endif
+   
 
  <div class="form-group fg-line" >
           <p class="f-500 c-black m-b-15">Payment</p>
@@ -203,7 +204,7 @@ input[type=number]::-webkit-outer-spin-button {
         <input type="number"  step=".01" min="0" name="advance"  value="{{ (!empty($booking) ? ($booking->total  - $paid) : '')  }}" class="form-control " id="advance" placeholder="Advance">
       </div>
 
-    <div class="alert alert-warning warning" role="alert" style="display: none">There few overlapping booking exist with the selected Halls</div>
+    <div class="alert alert-warning warning" role="alert" style="display: none">Hall Unavailable, Please select a Different Hall Type or Select New Date.</div>
 
      @if (empty($booking->id) || (!empty($booking->active) && $booking->active == 1))
       <button type="submit" class="submit btn btn-primary btn-sm m-t-10">Submit</button>
@@ -283,7 +284,6 @@ function checkDuplicate(dayType, pm_id, date, bid) {
   if ((dayType != undefined && dayType !== '') && (pm_id != undefined && pm_id !== '') && (date != undefined && date !== '')) {
     $.getJSON("/booking/check-duplicate/"+ dayType + '/' + pm_id + '/' + date + '/' + bid, function(data) {
         var i =0;
-        console.log(data);
         if (data[0] !== undefined) {
         //  $(".submit").hide();
           $(".warning").show();
@@ -339,7 +339,7 @@ forcAllValuetoEmpty();
 
   getAddonPrice(this.value) 
 
-  checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
+  checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val(),  {{ $booking->id or '' }}) 
 
   
 })
@@ -373,7 +373,6 @@ $('#pm_id').on('change', function() {
     $("#pm_amount").html(numberWithCommas(price))
     $("#h_total").val(price)
     total()
-    checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val()) 
 })
 
 $(document).on("change", "input[name='addon[]']", function () {
@@ -404,25 +403,7 @@ $('#payment_type').on('change', function() {
   }
 })
 
-/*
-timer = 0;
 
-$('#discount').on('keyup', function(e){
-    if (timer) {
-        clearTimeout(timer);
-    }
-    timer = setTimeout(discount, 1400); 
-});
-
-
-function discount() {
-    var discount  = parseFloat($('#discount').val())
-    var tt_total =  parseFloat($("#tt_total").html())
-    var final_dis = tt_total - ((tt_total * discount) / 100) ;
-    $("#total").val(final_dis);
-   $("#tt_total").html(final_dis);
-   $("#total_with_disc").html(final_dis)
-}*/
 
 function total(t_addon) {
 
@@ -435,18 +416,26 @@ function total(t_addon) {
   total = numberWithCommas(total.toFixed(2));
 
    $("#tt_total").html(total); // Total Booking info
+   var paid = parseFloat($("#paid").html().replace(/,/g, ""));
+   if (paid == undefined || paid == '') {
+      paid = 0.00;
+   }
 
    var tot_with_dic = parseFloat($("#total_with_disc").html().replace(/,/g, ""));
    if (tot_with_dic > 0) {
       var n = tot_with_dic + t_addon;
       var y = numberWithCommas(n.toFixed(2));
       $("#total_with_disc").html(y)
-      var z = tot_with_dic + t_addon;
-      $("#total").val(z.toFixed(2))
+      //var z = tot_with_dic + t_addon;
+      $("#total").val(tot_with_dic + t_addon)
+       $("#advance").val((tot_with_dic + t_addon) - paid);
    } else {
-    $("#total_with_disc").html(numberWithCommas(total)).toFixed(2)
-    $("#total").val(total)
+    $("#total_with_disc").html(total)
+    $("#total").val(total.replace(/,/g, ""))
+     $("#advance").val(total.replace(/,/g, "") - paid)
    }
+
+    checkDuplicate($('#day_type').val(), $('#pm_id').val(), $('#b_date').val(),  {{ $booking->id or '' }}) 
   
 }
 
